@@ -1,8 +1,8 @@
-const API_BASE = 'https://hera-tox-646749664538.europe-west1.run.app';
-const GIPHY_KEY = 'hwhnpVCf0AQTX898mvXm9NPkHH4mqtYX';
+import { API_BASE, GIPHY_KEY, CAT_EMOJI, apiUrl } from './js/config.js';
+import { el } from './js/dom.js';
+import { debounce, esc, genId, md, PP, timeAgo } from './js/utils.js';
 
-const el  = id => document.getElementById(id);
-const url = path => `${API_BASE}${path}`;
+const url = apiUrl;
 
 const token    = () => localStorage.getItem('tox_token');
 const username = () => localStorage.getItem('tox_user');
@@ -14,19 +14,6 @@ const jsonHeaders = () => {
   return h;
 };
 const authHeader = () => token() ? { 'Authorization': `Bearer ${token()}` } : {};
-
-const esc = t => (t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-const md  = t => t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-                   .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
-                   .replace(/\*(.*?)\*/g,'<em>$1</em>')
-                   .replace(/`([^`]+)`/g,'<code>$1</code>')
-                   .replace(/\n/g,'<br>');
-const timeAgo = ts => {
-  const d=Date.now()-ts, m=Math.floor(d/60000), h=Math.floor(m/60), dy=Math.floor(h/24);
-  return dy>0?`${dy}μ`:h>0?`${h}ω`:m>0?`${m}λ`:'τώρα';
-};
-
-const CAT_EMOJI = { 'Vibes':'🎵', 'Διατροφή':'🥗', 'Τεχνολογία':'💻', 'Γυμναστική':'💪', 'Αγγελίες':'📢' };
 
 // ── STATE ────────────────────────────────────────────────────
 let currentTab      = 'feed';
@@ -59,12 +46,6 @@ let currentThreadCat  = '';
 let notifPoll         = null;
 let unreadCount       = 0;
 let notifDropdownOpen = false;
-
-// ── PROFILE PICS ─────────────────────────────────────────────
-const PP = {
-  get: u => { try { return JSON.parse(localStorage.getItem('pp')||'{}')[u]||null; } catch { return null; } },
-  set: (u,b) => { try { const m=JSON.parse(localStorage.getItem('pp')||'{}'); if(b)m[u]=b; else delete m[u]; localStorage.setItem('pp',JSON.stringify(m)); } catch {} }
-};
 
 // ── INIT ─────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
@@ -217,11 +198,6 @@ function wireListeners() {
       startNotifPoll();
     }
   });
-}
-
-function debounce(fn, ms) {
-  let t;
-  return (...args) => { clearTimeout(t); t = setTimeout(() => fn(...args), ms); };
 }
 
 // ── AUTH ─────────────────────────────────────────────────────
@@ -459,8 +435,6 @@ async function openUserProfile(uname) {
 }
 
 // ── HRA CHAT ─────────────────────────────────────────────────
-function genId() { return Math.random().toString(36).slice(2)+Date.now().toString(36); }
-
 function newChat() {
   currentSession=genId();
   el('chat-logs')?.replaceChildren(); el('chat-logs')?.classList.add('hidden');
