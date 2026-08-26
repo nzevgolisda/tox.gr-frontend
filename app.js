@@ -18,7 +18,7 @@ const loggedIn = () => !!token();
 
 // ── STATE ────────────────────────────────────────────────────
 // ── INIT ─────────────────────────────────────────────────────
-window.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('app-ready', () => {
   initChat({ loggedIn, logout, switchTab });
   initNavigation({ loggedIn, openAuth, openOwnProfile, logout, toggleTheme, loadFeed, loadThreads, loadFriends, loadGroups, backToFriends, backToGroups, startOnlinePoll, stopOnlinePoll, loadSessionHistory });
   initProfiles({ loggedIn, username, loadFriends, loadFeed });

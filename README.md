@@ -78,6 +78,8 @@ Real-time notification badges when users receive:
 
 Notifications are polled while the user is active, paused when the browser tab is hidden, and reset on logout.
 
-## Frontend Modules
+## Frontend Structure
+
+`index.html` is a small document shell. `js/html-loader.js` loads the page sections from `html/partials/` before dispatching `app-ready`, so the static frontend does not require a build tool or server-side template engine.
 
 `app.js` is the small application coordinator. Feature workflows are separated into modules under `js/`, including authentication, chat, feed, messaging, profiles, threads, notifications, navigation, theme, GIFs, and online presence. See [CONTRIBUTING.md](CONTRIBUTING.md) for module ownership and local development guidance.

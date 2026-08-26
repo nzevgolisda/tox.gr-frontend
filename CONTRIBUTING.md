@@ -2,9 +2,13 @@
 
 ## Project structure
 
-This is a build-free static frontend. Open `index.html` through a local HTTP server so browser ES modules and API requests work consistently. `app.js` is intentionally a small application coordinator; feature state and event handling live in the feature modules.
+This is a build-free static frontend. Open `index.html` through a local HTTP server so browser ES modules, HTML partials, and API requests work consistently. `app.js` is intentionally a small application coordinator; feature state and event handling live in the feature modules.
 
-- `index.html` is the page composition root and owns the stable DOM IDs used by features.
+- `index.html` is the document shell and owns metadata, theme bootstrap, the partial mount point, and script loading.
+- `js/html-loader.js` loads the HTML partials in order and dispatches `app-ready` after the DOM is assembled.
+- `html/partials/overlays.html` contains authentication, profile, settings, history, media, group, and thread overlays.
+- `html/partials/navigation.html` contains the mobile menu and notifications dropdown.
+- `html/partials/main.html` contains the sidebar, desktop tabs, feed, ΗΡΑ chat, messaging, threads, and mobile navigation.
 - `app.js` coordinates startup, authentication state, and feature initialization.
 - `js/auth.js` owns login and registration.
 - `js/chat.js` owns ΗΡΑ chat, attachments, and saved sessions.
@@ -21,7 +25,7 @@ This is a build-free static frontend. Open `index.html` through a local HTTP ser
 - `js/keyboard.js` owns global Escape-key dismissal for overlays, menus, and notifications.
 - `style.css` contains the shared visual system and component styles.
 
-When adding a feature, keep API calls, private state, and state transitions close to that feature. Extract shared helpers into `js/` only when they are used by more than one feature. Keep `index.html` as the static composition root unless the project gains a build step for HTML partials.
+When adding a feature, keep API calls, private state, and state transitions close to that feature. Extract shared helpers into `js/` only when they are used by more than one feature. Preserve the stable DOM IDs when editing partials because JavaScript modules bind to those IDs. If partial ordering changes, verify that `app-ready` still fires only after every partial has loaded.
 
 Feature modules should normally stay between 50 and 100 lines when practical. Keep a complete workflow together when splitting it further would make state ownership or event flow less clear; shared helper modules may be smaller.
 
