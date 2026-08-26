@@ -4,7 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta name="description" content="tox.cy — Communication">
-  <script src="js/theme-bootstrap.js"></script>
+  <script>
+    if (localStorage.getItem('theme') === 'dark') {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  </script>
   <title>tox.cy</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -333,13 +337,13 @@
             </label>
             <input type="file" id="file-input" accept="image/*,.pdf" hidden>
             <input type="text" id="user-input" placeholder="Πληκτρολογήστε ένα μήνυμα..." autocomplete="off" lang="el">
-            <button id="send-action-btn" onmousedown="event.preventDefault()">
+            <button id="send-action-btn">
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
             </button>
           </div>
           <div id="file-preview" class="file-preview hidden">
             <span id="attached-filename"></span>
-            <button type="button" id="clear-file-action" onmousedown="event.preventDefault()">✕</button>
+            <button type="button" id="clear-file-action">✕</button>
           </div>
         </div>
         <p class="disclaimer">Η Ήρα μπορεί να παρουσιάζει ανακρίβειες.</p>
@@ -386,9 +390,9 @@
           <div id="dm-messages" class="dm-messages"></div>
           <div id="dm-gif-preview" class="pending-gif-preview hidden"></div>
           <div class="dm-input-bar">
-            <button class="gif-icon-btn" id="dm-gif-btn" onmousedown="event.preventDefault()">GIF</button>
+            <button class="gif-icon-btn" id="dm-gif-btn">GIF</button>
             <input type="text" id="dm-input" placeholder="Μήνυμα..." lang="el">
-            <button id="dm-send-btn" onmousedown="event.preventDefault()">
+            <button id="dm-send-btn">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
             </button>
           </div>
@@ -419,9 +423,9 @@
           <div id="grp-messages" class="dm-messages"></div>
           <div id="grp-gif-preview" class="pending-gif-preview hidden"></div>
           <div class="dm-input-bar">
-            <button class="gif-icon-btn" id="grp-gif-btn" onmousedown="event.preventDefault()">GIF</button>
+            <button class="gif-icon-btn" id="grp-gif-btn">GIF</button>
             <input type="text" id="grp-input" placeholder="Μήνυμα στην ομάδα..." lang="el">
-            <button id="grp-send-btn" onmousedown="event.preventDefault()">
+            <button id="grp-send-btn">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
             </button>
           </div>
@@ -468,7 +472,7 @@
         </div>
         <div class="dm-input-bar" id="thread-reply-bar">
           <input type="text" id="thread-reply-input" placeholder="Γράψτε απάντηση..." lang="el">
-          <button id="thread-reply-btn" onmousedown="event.preventDefault()">
+          <button id="thread-reply-btn">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           </button>
         </div>

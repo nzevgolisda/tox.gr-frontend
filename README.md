@@ -13,7 +13,7 @@ Two domains, one backend, same codebase: **tox.gr** and **tox.cy**.
 
 | Layer | Technology | Details |
 |---|---|---|
-| Frontend | Static HTML/CSS/JS | Hosted 
+| Frontend | Static HTML/CSS/JS | Build-free browser modules
 | Backend | Node.js / Express | Cloud Run
 | Database | Supabase PostgreSQL | 
 
@@ -67,12 +67,17 @@ Two domains, one backend, same codebase: **tox.gr** and **tox.cy**.
 - Block/unblock users
 - Reputation gifting (⭐, 1/day limit)
 
-## Planned Feature: Notifications
+## Notifications
 
-### What to build
 Real-time notification badges when users receive:
 - A new friend request
 - A DM from a friend
 - A like or comment on their post
 - A like or reply on their thread
 - A reputation gift
+
+Notifications are polled while the user is active, paused when the browser tab is hidden, and reset on logout.
+
+## Frontend Modules
+
+`app.js` is the small application coordinator. Feature workflows are separated into modules under `js/`, including authentication, chat, feed, messaging, profiles, threads, notifications, navigation, theme, GIFs, and online presence. See [CONTRIBUTING.md](CONTRIBUTING.md) for module ownership and local development guidance.
