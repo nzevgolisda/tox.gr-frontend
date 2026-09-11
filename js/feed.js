@@ -1,7 +1,7 @@
 import { apiUrl } from './config.js';
 import { el } from './dom.js';
 import { authHeaders, jsonHeaders } from './api.js';
-import { esc, PP, timeAgo } from './utils.js';
+import { esc, PP, safeAttr, timeAgo } from './utils.js';
 
 let offset = 0;
 let pendingGif = null;
@@ -51,7 +51,10 @@ async function publishPost() {
 }
 function buildPostCard(post) {
   const card = document.createElement('div'); card.className = 'post-card'; const name = post.author || '?'; const picture = PP.get(name);
-  card.innerHTML = `<div class="post-header"><div class="post-avatar">${picture ? `<img src="${picture}">` : name[0].toUpperCase()}</div><div class="post-meta"><div class="post-author">${esc(name)}</div><div class="post-time">${timeAgo(new Date(post.created_at).getTime())}</div></div></div>${post.content ? `<div class="post-content">${esc(post.content)}</div>` : ''}${post.gif_url ? `<div class="post-media"><img src="${post.gif_url}" alt="GIF"></div>` : ''}<div class="post-footer"><button class="post-like-btn ${post.liked ? 'liked' : ''}">❤ <span>${post.like_count}</span></button><button class="post-comment-toggle">💬 <span>${post.comment_count}</span></button></div><div class="post-comments hidden"><div class="cmt-list"></div>${deps.loggedIn() ? '<input class="cmt-input" placeholder="Σχόλιο..."><button class="cmt-send-btn">→</button>' : ''}</div>`;
+  const safeName = esc(name);
+  const safeContent = post.content ? `<div class="post-content">${esc(post.content)}</div>` : '';
+  const safeGif = post.gif_url ? `<div class="post-media"><img src="${safeAttr(post.gif_url)}" alt="GIF"></div>` : '';
+  card.innerHTML = `<div class="post-header"><div class="post-avatar">${picture ? `<img src="${safeAttr(picture)}">` : safeName[0]?.toUpperCase() || '?'}</div><div class="post-meta"><div class="post-author">${safeName}</div><div class="post-time">${timeAgo(new Date(post.created_at).getTime())}</div></div></div>${safeContent}${safeGif}<div class="post-footer"><button class="post-like-btn ${post.liked ? 'liked' : ''}">❤ <span>${post.like_count}</span></button><button class="post-comment-toggle">💬 <span>${post.comment_count}</span></button></div><div class="post-comments hidden"><div class="cmt-list"></div>${deps.loggedIn() ? '<input class="cmt-input" placeholder="Σχόλιο..."><button class="cmt-send-btn">→</button>' : ''}</div>`;
   card.querySelector('.post-avatar').addEventListener('click', () => deps.openUserProfile(name));
   card.querySelector('.post-like-btn').addEventListener('click', async () => { if (!deps.loggedIn()) { deps.openAuth(); return; } const response = await fetch(apiUrl(`/api/posts/${post.id}/like`), { method: 'POST', headers: jsonHeaders() }); const data = await response.json(); card.querySelector('.post-like-btn').classList.toggle('liked', data.liked); card.querySelector('.post-like-btn span').textContent = data.count; });
   card.querySelector('.post-comment-toggle').addEventListener('click', async () => { const section = card.querySelector('.post-comments'); section.classList.toggle('hidden'); if (!section.classList.contains('hidden')) { const response = await fetch(apiUrl(`/api/posts/${post.id}/comments`), { headers: authHeaders() }); const data = await response.json(); card.querySelector('.cmt-list').innerHTML = (data.comments || []).slice(0, 3).map(comment => `<div class="comment"><b>${esc(comment.author)}</b> ${esc(comment.content)}</div>`).join(''); } });

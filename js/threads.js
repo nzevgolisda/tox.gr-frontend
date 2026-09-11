@@ -1,7 +1,7 @@
 import { CAT_EMOJI } from './config.js';
 import { el } from './dom.js';
-import { authHeaders, jsonHeaders, request } from './api.js';
-import { debounce, esc, PP, timeAgo } from './utils.js';
+import { authHeaders, request } from './api.js';
+import { debounce, esc, PP, safeAttr, timeAgo } from './utils.js';
 
 let currentThread = null;
 let currentCategory = '';
@@ -178,7 +178,8 @@ function buildReplyCard(reply) {
   const avatar = document.createElement('div');
   avatar.className = 'reply-avatar';
   const picture = PP.get(reply.author);
-  avatar.innerHTML = picture ? `<img src="${picture}" alt="${(reply.author || '?')[0].toUpperCase()}">` : (reply.author || '?')[0].toUpperCase();
+  const authorInitial = (reply.author || '?')[0].toUpperCase();
+  avatar.innerHTML = picture ? `<img src="${safeAttr(picture)}" alt="${safeAttr(authorInitial)}">` : safeAttr(authorInitial);
   const author = document.createElement('span');
   author.className = 'reply-author';
   author.textContent = reply.author;

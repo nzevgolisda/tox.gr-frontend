@@ -4,6 +4,12 @@ export const esc = text => (text || '')
   .replace(/>/g, '&gt;')
   .replace(/\n/g, '<br>');
 
+export const safeAttr = value => String(value ?? '')
+  .replace(/&/g, '&amp;')
+  .replace(/"/g, '&quot;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;');
+
 export const md = text => text
   .replace(/&/g, '&amp;')
   .replace(/</g, '&lt;')
